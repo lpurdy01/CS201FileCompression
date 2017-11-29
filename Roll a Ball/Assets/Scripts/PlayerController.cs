@@ -7,14 +7,10 @@ public class PlayerController : MonoBehaviour {
 
 	public float speed;
 	public int jumpHeight;
-	public Text countText;
-	public Text winText;
+	
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
-		count = 0;
-		winText.text = "";
-		SetCountText ();
 	}
 	
 	// Update is called once per frame
@@ -23,10 +19,13 @@ public class PlayerController : MonoBehaviour {
 		{
 			Jump ();
 		}
+        if (Input.GetKeyDown(KeyCode.RightAlt))
+        {
+            Fall ();
+        }
 	}
 		
 	private Rigidbody rb;
-	private int count; 
 
 	void FixedUpdate () {
 		float moveHorizontal = Input.GetAxis ("Horizontal");
@@ -42,20 +41,12 @@ public class PlayerController : MonoBehaviour {
 
 		rb.AddForce (jump*speed);
 	}
+    void Fall()
+    {
+        Vector3 fall = new Vector3(0, -jumpHeight, 0);
 
-	void OnTriggerEnter(Collider other) {
-		if (other.gameObject.CompareTag ("Pick Up")) {
-			other.gameObject.SetActive (false);
-			count++;
-			SetCountText ();
-		}
-	}
+        rb.AddForce(fall * speed);
+    }
 
-	void SetCountText () {
-		countText.text = "Count: " + count.ToString();
-		if (count == 8) {
-			winText.text = "You Win!";
-			//winText.enabled = true;
-		}
-	}
+
 }
